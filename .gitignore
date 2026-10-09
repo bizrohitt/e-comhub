@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Django
+*.sqlite3
+*.sqlite3-journal
+/staticfiles/
+/media/
+.env
+.env.*
+!.env.example
+
+# Node (only used for Tailwind CLI / node --test; no app deps)
+node_modules/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Build + reports
+/dist/
+/build/
+lighthouse-report.*
