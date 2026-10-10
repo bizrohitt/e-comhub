@@ -5,6 +5,36 @@ Newest entry on top. A new session must be able to resume from `AGENTS.md` + `do
 
 ---
 
+## 2026-10-10 · housekeeping · Repo hygiene audit + `scripts/clean.sh` · **done**
+
+**Done**
+- **Audited the whole project for junk: there is none.** 37 tracked files, 257 KB excluding
+  `.git`, zero untracked files, zero ignored files present on disk. No `.venv`, no `__pycache__`,
+  no caches, no stray archives, no editor files, nothing outside the repo root.
+- **Repaired the local Git state.** The branch pointer had rewound to `53c513d` (Initial commit)
+  between sessions, leaving all P0-T01/P0-T02 work on disk as *untracked* files. The pushed history
+  was intact, so `git reset --mixed FETCH_HEAD` re-anchored the branch at `eb57b65` without touching
+  the working tree. `git status` is now clean and nothing was lost.
+- Added **`scripts/clean.sh`** — removes caches/bytecode by default; `--all` also removes `.venv`,
+  `db.sqlite3`, `staticfiles/`, `dist/`, `build/`; `--dry` previews. It refuses to run outside the
+  repo root, **skips anything Git tracks**, and verifies no tracked file changed before exiting.
+  Tested by planting junk (`__pycache__`, `.ruff_cache`, `.DS_Store`, `db.sqlite3`) and clearing it.
+- Documented repo hygiene + the venv bootstrap command in `AGENTS.md`.
+
+**Known issues / risks**
+- **`.venv` does not persist between sessions** (it's gitignored, and the sandbox resets it). Every
+  session must run the bootstrap line in `AGENTS.md` before `scripts/check.sh` can run the ruff and
+  pytest gates — otherwise they silently skip and a session can "pass" without linting anything.
+- The branch-pointer rewind may recur. **Check `git log --oneline -3` at the start of every
+  session**; if HEAD is behind the remote, `git fetch && git reset --mixed FETCH_HEAD` fixes it.
+
+**Exact next step**
+Unchanged: `P0-T03 — Django skeleton and settings split`.
+
+**Blocked on:** nothing.
+
+---
+
 ## 2026-10-09 · P0-T02 · Tooling and dependency baseline · **done**
 
 **Done**

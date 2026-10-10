@@ -41,13 +41,21 @@ Plan in 5 lines → implement small files + tests → `scripts/check.sh` → sel
 
 ## Commands
 ```bash
-scripts/check.sh                  # line limit + ruff + pytest + node --test
+# Start of session — .venv is NOT committed and may not survive between sessions.
+python3 -m venv .venv && .venv/bin/pip install -r requirements/dev.txt
+
+scripts/check.sh                  # line limit + ruff + django check + pytest + node --test
 scripts/check_line_limit.sh       # file-size rule only
-python manage.py runserver        # dev server (after P0-T03)
-python manage.py check_tools      # validate the tool registry (after P1-T02)
-pytest -q                         # Python tests
+scripts/clean.sh [--all] [--dry]  # delete caches/venv/db; never touches tracked files
+.venv/bin/python manage.py runserver     # dev server (after P0-T03)
+.venv/bin/python manage.py check_tools   # validate the tool registry (after P1-T02)
+.venv/bin/pytest -q               # Python tests
 node --test tests/js              # browser-formula tests (no deps, Node built-in)
 ```
+**Repo hygiene:** the only things that belong on disk are the 37 tracked files. Everything else
+(`.venv/`, `__pycache__/`, `.ruff_cache/`, `db.sqlite3`, `staticfiles/`) is generated, gitignored,
+and removable with `scripts/clean.sh --all`. If `git status` is not empty at the end of a session,
+either commit it or clean it — never leave it.
 
 ## Skills — load the one you need, not all
 | Task type | Skill |
