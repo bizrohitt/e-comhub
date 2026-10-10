@@ -12,15 +12,18 @@ fails code review.
 
 ---
 
-## 1. Runtime — Python (planned pins for P0-T02)
+## 1. Runtime — Python (pinned in `requirements/`, installed and verified 2026-10-09)
 
 | Package | Version | License | Source | Checked | Ships to user? |
 |---|---|---|---|---|---|
 | Python | 3.11+ (3.12 preferred) | PSF-2.0 | python.org | 2026-10-09 | no |
-| Django | 5.2.x LTS (latest 5.2.18) | BSD-3-Clause | pypi.org/project/Django | 2026-10-09 | no |
+| Django | 5.2.18 (LTS) | BSD-3-Clause | pypi.org/project/Django | 2026-10-09 | no |
 | whitenoise | 6.12.0 | MIT | pypi.org/project/whitenoise | 2026-10-09 | no |
+| python-dotenv | 1.2.4 | BSD-3-Clause | pypi.org/project/python-dotenv | 2026-10-09 | no |
 | gunicorn | 26.2.0 | MIT | pypi.org/project/gunicorn | 2026-10-09 | no (prod only) |
-| python-dotenv *or* django-environ | 1.2.4 / 0.14.0 | BSD-3-Clause / MIT | pypi | 2026-10-09 | no |
+
+`django-environ` (MIT, 0.14.0) was evaluated and **rejected** — ADR-014. Resolution verified by a
+clean install into `.venv` on Python 3.11.2: no conflicts, no transitive surprises.
 
 **Deliberately not added yet** (each needs an ADR first): `django-ninja` (MIT, 1.7.1) — P6 API tier ·
 `django-unfold` (MIT, 0.108.0) — P7 admin styling · `pillow` (MIT-CMU, 12.3.0) — only if we ever do

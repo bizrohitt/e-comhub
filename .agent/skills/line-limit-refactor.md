@@ -28,8 +28,8 @@ A file is too big *before* it hits the limit if you can't describe it in one sen
    `__init__.py` so callers don't change:
    ```python
    # tools/ecommerce/x/logic/__init__.py
-   from .margin import margin, markup          # noqa: F401
-   from .fees import platform_fees             # noqa: F401
+   from .margin import margin, markup  # noqa: F401
+   from .fees import platform_fees  # noqa: F401
    ```
 6. **Re-run everything:** `scripts/check.sh`. Diff the rendered HTML of an affected page before and
    after if you split a template.

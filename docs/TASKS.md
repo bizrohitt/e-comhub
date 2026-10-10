@@ -1,8 +1,8 @@
 # TASKS — e-comhub
 
-**Board state:** 1 done · 0 doing · 39 todo (of 40 planned through Phase 4)
+**Board state:** 2 done · 0 doing · 38 todo (of 40 planned through Phase 4)
 **Current phase:** 0 — Foundation
-**Next task:** `P0-T02`
+**Next task:** `P0-T03`
 
 ---
 
@@ -24,9 +24,9 @@ Status values: `todo` · `doing` · `review` · `done` · `blocked`
 **Depends:** — · **Files:** `AGENTS.md`, `docs/*.md`, `.agent/skills/*.md`, `scripts/*.sh`, `.gitignore`, `README.md`
 **Accept:** all 13 knowledge files + 14 skills exist with real content; `check_line_limit.sh` passes; stack proposal + 40 tasks drafted.
 
-### P0-T02 · Tooling and dependency baseline · S · todo
-**Depends:** P0-T01 · **Files:** `pyproject.toml`, `requirements/{base,dev,prod}.txt`, `.env.example`, `.github/workflows/ci.yml`
-**Accept:** pinned Django 5.2.x + whitenoise + pytest-django + ruff; `ruff check`/`ruff format --check` clean; CI runs `scripts/check.sh` on push; every pinned package has a row in `LICENSES.md`.
+### P0-T02 · Tooling and dependency baseline · S · **done**
+**Depends:** P0-T01 · **Files:** `pyproject.toml`, `requirements/{base,dev,prod}.txt`, `.env.example`, `.github/workflows/ci.yml`, `scripts/check.sh`
+**Accept:** ✅ Django 5.2.18 + whitenoise 6.12.0 + python-dotenv 1.2.4 pinned and installed clean on Python 3.11.2; ruff 0.16.10 lint + format green; `scripts/check.sh` gates line limit → ruff → django check → pytest → `node --test`, skipping what doesn't exist yet; CI matrix 3.11/3.12 on every push; all pins recorded in `LICENSES.md`.
 
 ### P0-T03 · Django skeleton and settings split · M · todo
 **Depends:** P0-T02 · **Files:** `manage.py`, `config/settings/{base,dev,prod}.py`, `config/urls.py`, `config/wsgi.py`, `core/views.py`

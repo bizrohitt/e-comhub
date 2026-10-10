@@ -5,6 +5,54 @@ Newest entry on top. A new session must be able to resume from `AGENTS.md` + `do
 
 ---
 
+## 2026-10-09 · P0-T02 · Tooling and dependency baseline · **done**
+
+**Done**
+- `pyproject.toml` — ruff (py311 target, 100 cols, rule set `E W F I UP B C4 DJ S T20 SIM RUF`,
+  per-file ignores for settings/tests/scripts) + pytest config (`DJANGO_SETTINGS_MODULE=
+  config.settings.dev`, `--strict-markers --strict-config`, DeprecationWarning → error).
+- `requirements/{base,dev,prod}.txt` — exact pins, each with its license in a trailing comment:
+  Django **5.2.18** (LTS, released 2026-10-06), whitenoise 6.12.0, python-dotenv 1.2.4;
+  dev adds pytest 9.1.1, pytest-django 4.14.0, ruff 0.16.10; prod adds gunicorn 26.2.0.
+- **Verified the pins actually resolve** — clean install into `.venv` on Python 3.11.2, no
+  conflicts. Not a paper exercise.
+- `.env.example` — every key the settings module will read: core, database path, prod security,
+  rate limits, email (needed at P4), bootstrap feature flags.
+- `.github/workflows/ci.yml` — runs `scripts/check.sh` on a 3.11/3.12 matrix, pip cache,
+  concurrency cancel, read-only token.
+- `scripts/check.sh` rewritten: prefers `.venv/bin/*`, adds `ruff format --check` and
+  `manage.py check` gates, and now *names* the reason when it skips one.
+
+**Decisions made**
+- **ADR-014** — `python-dotenv` + our own ~25-line typed `env()` helper instead of `django-environ`:
+  we need file loading and casting, not its `DATABASE_URL`/`CACHE_URL`/`EMAIL_URL` parsers.
+
+**Half-done / not started**
+Nothing. Still zero application code — `config/` and `manage.py` arrive in P0-T03.
+
+**Exact next step**
+`P0-T03 — Django skeleton and settings split`: `django-admin startproject config .`, then split
+settings into `base.py`/`dev.py`/`prod.py` with the typed `env()` helper, wire WhiteNoise, add
+`core/views.py::healthz` returning `{"status": "ok"}`, and point `config/urls.py` at it. Then
+`python manage.py check --deploy` with prod settings and fix every critical warning.
+
+**Commands to run**
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r requirements/dev.txt   # if .venv is missing
+bash scripts/check.sh      # expect ALL CHECKS PASSED (django/pytest/node gates still skipped)
+```
+
+**Known issues / risks**
+- Ruff 0.16 formats Python inside Markdown fences — a doc code sample was reformatted on the first
+  run. Harmless and arguably good (docs stay consistent with the codebase), but expect it.
+- `filterwarnings = ["error::DeprecationWarning"]` is deliberately strict; if a third-party
+  deprecation ever blocks CI, add a targeted `ignore::` entry rather than removing the rule.
+- CI has never run yet — it will execute for the first time on this push.
+
+**Blocked on:** nothing.
+
+---
+
 ## 2026-10-09 · P0-T01 · Knowledge base, skills, plan, task board · **done**
 
 **Done**

@@ -1,0 +1,6 @@
+# Runtime dependencies. Exact pins only — no ranges, no carets.
+# Every package here has a row in docs/LICENSES.md. Checked 2026-10-09.
+
+Django==5.2.18          # BSD-3-Clause — LTS, security-supported to April 2028 (ADR-001)
+whitenoise==6.12.0      # MIT — static files straight from the app, no nginx config needed
+python-dotenv==1.2.4    # BSD-3-Clause — loads .env in dev; typed casting is our own 25-line helper

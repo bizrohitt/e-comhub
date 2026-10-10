@@ -1,0 +1,5 @@
+-r base.txt
+
+pytest==9.1.1           # MIT
+pytest-django==4.14.0   # BSD-3-Clause
+ruff==0.16.10           # MIT — replaces black + flake8 + isort (ADR-002)

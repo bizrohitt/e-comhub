@@ -8,6 +8,15 @@ Status values: `accepted` · `proposed` (awaiting founder) · `superseded by ADR
 
 ---
 
+## ADR-014 · 2026-10-09 · accepted
+**`python-dotenv` + our own ~25-line typed `env()` helper, not `django-environ`.**
+Options: `django-environ` (MIT) / `python-dotenv` + helper / `os.environ` only.
+Reason: we need file loading in dev and typed casting (`bool`, `int`, `list`) in settings — but not
+`django-environ`'s `DATABASE_URL`/`CACHE_URL`/`EMAIL_URL` parsers, which are its bulk and which we'd
+never use on SQLite. A helper we own is smaller than the docs of the one we'd import.
+Consequence: `core`-free helper lives in `config/settings/base.py`; if we ever adopt Postgres plus
+multiple URL-configured backends, revisit.
+
 ## ADR-013 · 2026-10-09 · proposed
 **Default currency is USD with a user-selectable currency; examples use round USD numbers.**
 Options: USD-first / INR-first / auto-detect by IP.

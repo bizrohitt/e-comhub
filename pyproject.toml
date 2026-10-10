@@ -1,0 +1,46 @@
+# Tool configuration only — this project is an application, not a distributable package.
+# Dependencies live in requirements/*.txt so hosts and CI can install them without a build step.
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["migrations", "static/js/vendor", ".venv"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # import sorting
+    "UP",       # pyupgrade
+    "B",        # bugbear
+    "C4",       # comprehensions
+    "DJ",       # flake8-django
+    "S",        # bandit security rules
+    "T20",      # no print()/pprint in shipped code
+    "SIM",      # simplify
+    "RUF",      # ruff-specific
+]
+ignore = [
+    "S101",     # assert: allowed, pytest uses it
+    "E501",     # line length is handled by the formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"config/settings/*.py" = ["F403", "F405"]       # settings star-imports are idiomatic
+"**/tests.py" = ["S101", "S105", "S106"]
+"tests/**/*.py" = ["S101", "S105", "S106"]
+"scripts/*.py" = ["T20"]                         # scripts are allowed to print
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "core", "tools", "pages", "leads", "analytics", "adminpanel"]
+
+[tool.ruff.format]
+quote-style = "double"
+docstring-code-format = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.dev"
+python_files = ["test_*.py", "tests.py"]
+testpaths = ["tests/python", "tools"]
+addopts = "-q --strict-markers --strict-config"
+filterwarnings = ["error::DeprecationWarning"]
