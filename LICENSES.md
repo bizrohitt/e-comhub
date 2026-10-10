@@ -1,6 +1,6 @@
 # LICENSES — The House Of Sahas
 
-**Status:** skeleton, Phase 0. Populated in Phase 1 as dependencies are actually installed, and verified again at every upgrade.
+**Status:** stack locked at P0-04 (2026-10-10). Rows below carry planned entries; **exact versions are filled in P1-12** when packages are installed, and re-verified at every upgrade.
 
 **Policy (Master Prompt Rules 8 and 9):**
 
@@ -18,18 +18,41 @@
 
 ## 1. Code dependencies
 
+Locked at P0-04. **Versions are recorded at install time in P1-12**, not assumed now. Every row must be re-verified at each upgrade.
+
 | Name | Version | License | OSI approved | Permits modification + commercial use | Link | Used in | Notes |
 |---|---|---|---|---|---|---|---|
-| _(none installed yet)_ | | | | | | | |
+| Medusa | _verify in P1-05_ | MIT | Yes | Yes | medusajs.com | `backend/` | Commerce engine |
+| Next.js | _verify in P1-07_ | MIT | Yes | Yes | nextjs.org | `storefront/` | |
+| TypeScript | _verify in P1-01_ | Apache-2.0 | Yes | Yes | typescriptlang.org | all | |
+| Tailwind CSS | _verify in P1-07_ | MIT | Yes | Yes | tailwindcss.com | `storefront/` | Token-only styling |
+| PostgreSQL | 16 | PostgreSQL License | Yes | Yes | postgresql.org | infra | Permissive, BSD-like |
+| Redis | 7.x | BSD-3 (7.x) | Yes | Yes | redis.io | infra | **Check the version installed:** Redis 8 moved to RSALv2/SSPL, which is *not* OSI open source. Pin to a 7.x release |
+| next-intl | _verify in P1-08_ | MIT | Yes | Yes | next-intl.dev | `storefront/` | EN + HI |
+| Lenis | _verify in P5_ | MIT | Yes | Yes | github.com/darkroomengineering/lenis | `storefront/` | Smooth scroll |
+| Motion | _verify in P5_ | MIT | Yes | Yes | motion.dev | `storefront/` | Formerly Framer Motion |
+| Lucide | _verify in P1-07_ | ISC | Yes | Yes | lucide.dev | `storefront/` | Icons |
+| React Email | _verify in P2_ | MIT | Yes | Yes | react.email | `backend/`, `storefront/` | Templates |
+| Umami | _verify in P2_ | MIT | Yes | Yes | umami.is | infra | Self-hosted analytics |
+| Payload CMS | _verify in P6_ | MIT | Yes | Yes | payloadcms.com | `backend/` | Deferred to Phase 6 |
+| Meilisearch | — | MIT | Yes | Yes | meilisearch.com | — | **Deferred.** Postgres FTS at launch |
+| Expo / React Native | _verify in P7_ | MIT | Yes | Yes | expo.dev | `mobile/` | Phase 7 |
+| Vitest | _verify in P1-10_ | MIT | Yes | Yes | vitest.dev | all | |
+| Playwright | _verify in P1-10_ | Apache-2.0 | Yes | Yes | playwright.dev | `tests/` | |
+| **GSAP** | — | Custom, **not OSI** | **No** | Free to use, but not open source | gsap.com | — | **EXCLUDED** by Rules 8 and 9. Requires explicit founder approval |
 
-Proposed stack to verify at install time: Medusa, Next.js, Tailwind CSS, Payload CMS, Expo / React Native, Lenis, Motion, Lucide, Meilisearch, React Email, Plausible or Umami, Vitest, Playwright, PostgreSQL client, Redis client.
+**Audit requirement (P1-12):** a re-runnable `scripts/license-audit.ts` that lists every installed package with its license and fails the build on GPL, AGPL, SSPL or any non-OSI license.
 
 ## 2. Fonts
 
 | Name | Version / cut | License | Link | Self-hosted | Notes |
 |---|---|---|---|---|---|
-| Cormorant Garamond | — | SIL OFL 1.1 | — | Yes (planned) | Headings. Preload hero weight only. |
-| Jost **or** Inter | — | SIL OFL 1.1 | — | Yes (planned) | Body. Choice pending P0-05. |
+| Cormorant Garamond | _verify in P0-05_ | SIL OFL 1.1 | fonts.google.com | Yes | Latin headings. Preload the hero weight only |
+| Inter | _verify in P1-08_ | SIL OFL 1.1 | rsms.me/inter | Yes | Latin body. Chosen over Jost for legibility at small sizes |
+| Tiro Devanagari Hindi | _proposed, confirm in P0-05_ | SIL OFL 1.1 | fonts.google.com | Yes | Hindi headings — serif register matching Cormorant |
+| Mukta _or_ Noto Sans Devanagari | _proposed, confirm in P0-05_ | SIL OFL 1.1 | fonts.google.com | Yes | Hindi body — pairs with Inter |
+
+**Critical:** Cormorant Garamond, Inter and Jost have **no Devanagari coverage**. Without the two Devanagari faces above, the Hindi locale renders as boxes or uncontrolled browser fallbacks. OFL notices must ship with the self-hosted files.
 
 ## 3. Images, video and other assets
 

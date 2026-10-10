@@ -6,7 +6,9 @@ Repo `e-comhub` is the monorepo root for three products on one backend: the stor
 
 ## Project status
 
-**Phase 0 — Discovery.** No application code has been written yet. The stack is proposed, not locked.
+**Phase 0 nearly complete.** All nine discovery answers are confirmed and the technology stack is locked in `ARCHITECTURE.md`. No application code has been written yet. Phase 1 tasks `P1-01` to `P1-12` are listed in `PROJECT_PLAN.md` and await the founder's "go".
+
+**Confirmed at a glance:** 10–20 menswear products · India, INR, English + Hindi, GST · Razorpay + capped COD · Shiprocket, free prepaid shipping · non-technical founder · ₹0–₹2,000/month · no photography yet · founder-only admin · no launch date.
 
 ## Start here
 
