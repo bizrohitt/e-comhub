@@ -43,19 +43,24 @@ kill_path() {
 
 echo "Cleaning $ROOT"
 
+# Remove the big rebuildable trees first and as a whole, so the scan below never
+# descends into them (otherwise a .venv alone prints 300 lines of __pycache__).
+if [ "$ALL" -eq 1 ]; then
+  for p in "${PATHS_ALL[@]}"; do [ -e "$p" ] && kill_path "$p"; done
+fi
+
+# Never descend into these: .git is sacred, the rest are vendor trees we don't audit.
+PRUNE=(-path ./.git -o -path ./.venv -o -path ./venv -o -path ./node_modules -o -path ./staticfiles)
+
 for d in "${PATTERNS_DIR[@]}"; do
   while IFS= read -r p; do kill_path "$p"; done \
-    < <(find . -path ./.git -prune -o -type d -name "$d" -print 2>/dev/null)
+    < <(find . \( "${PRUNE[@]}" \) -prune -o -type d -name "$d" -print 2>/dev/null)
 done
 
 for f in "${PATTERNS_FILE[@]}"; do
   while IFS= read -r p; do kill_path "$p"; done \
-    < <(find . -path ./.git -prune -o -type f -name "$f" -print 2>/dev/null)
+    < <(find . \( "${PRUNE[@]}" \) -prune -o -type f -name "$f" -print 2>/dev/null)
 done
-
-if [ "$ALL" -eq 1 ]; then
-  for p in "${PATHS_ALL[@]}"; do [ -e "$p" ] && kill_path "$p"; done
-fi
 
 echo
 if [ "$removed" -eq 0 ]; then
@@ -65,9 +70,12 @@ else
                    || echo "$removed item(s) removed."
 fi
 
-# Prove we broke nothing: no tracked file may be missing or modified by this script.
-if ! git diff --quiet 2>/dev/null; then
-  echo "WARNING: tracked files changed. Run 'git status' — this should never happen."
+# Prove we broke nothing. The only failure mode that matters is a tracked file being deleted —
+# unstaged *edits* are the user's own work and must not trigger a false alarm.
+missing="$(git ls-files --deleted 2>/dev/null)"
+if [ -n "$missing" ]; then
+  echo "WARNING: these tracked files are missing from disk — restore with 'git checkout -- .':"
+  echo "$missing" | sed 's/^/  /'
   exit 1
 fi
 echo "All tracked files intact."
